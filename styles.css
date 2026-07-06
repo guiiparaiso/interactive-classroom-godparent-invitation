@@ -339,6 +339,9 @@
     min-height: 170px;
     width: 100%;
   }
+  @media (max-width: 640px){
+    .chalk-buttons{ min-height: 260px; }
+  }
 
   .btn{
     font-family: 'Nunito', sans-serif;
