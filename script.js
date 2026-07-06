@@ -28,10 +28,6 @@
   var MAX_DODGES = 5;
   var caught = false;
 
-  function rectsOverlap(a, b){
-    return !(a.right < b.left || a.left > b.right || a.bottom < b.top || a.top > b.bottom);
-  }
-
   function dodge(){
     if (caught) return;
     dodges++;
@@ -40,24 +36,40 @@
     var yesRect = btnYes.getBoundingClientRect();
     var thinkW = thinkBtn.offsetWidth;
     var thinkH = thinkBtn.offsetHeight;
-    var maxX = Math.max(areaRect.width - thinkW - 10, 20);
-    var maxY = Math.max(areaRect.height - thinkH - 10, 20);
-    var buffer = 20; // espaço extra ao redor do botão "Sim" que o outro botão nunca invade
+    var buffer = 18; // espaço extra ao redor do botão "Sim" que o outro botão nunca invade
 
     var yesLocal = {
-      left: yesRect.left - areaRect.left - buffer,
-      right: yesRect.right - areaRect.left + buffer,
       top: yesRect.top - areaRect.top - buffer,
       bottom: yesRect.bottom - areaRect.top + buffer
     };
 
-    var randX, randY, candidate, tries = 0;
-    do {
-      randX = Math.random() * maxX;
-      randY = Math.random() * maxY;
-      candidate = { left: randX, right: randX + thinkW, top: randY, bottom: randY + thinkH };
-      tries++;
-    } while (rectsOverlap(candidate, yesLocal) && tries < 30);
+    var maxX = Math.max(areaRect.width - thinkW - 8, 4);
+
+    // Em vez de sortear X e Y juntos (o que em telas estreitas quase
+    // sempre esbarra no botão "Sim"), escolhemos uma FAIXA vertical
+    // inteira que não toca o botão "Sim" e sorteamos dentro dela.
+    // Isso garante zero sobreposição em qualquer largura de tela.
+    var bands = [];
+    var topBandHeight = yesLocal.top - thinkH;
+    if (topBandHeight > 6){
+      bands.push({ min: 4, max: topBandHeight });
+    }
+    var bottomBandStart = yesLocal.bottom;
+    var bottomBandHeight = (areaRect.height - thinkH - 4) - bottomBandStart;
+    if (bottomBandHeight > 6){
+      bands.push({ min: bottomBandStart, max: bottomBandStart + bottomBandHeight });
+    }
+
+    var randY;
+    if (bands.length > 0){
+      var band = bands[Math.floor(Math.random() * bands.length)];
+      randY = band.min + Math.random() * (band.max - band.min);
+    } else {
+      // não há espaço vertical livre: manda pro rodapé da área, bem
+      // abaixo de tudo, nunca em cima do botão "Sim"
+      randY = Math.max(areaRect.height - thinkH - 4, yesLocal.bottom);
+    }
+    var randX = Math.random() * maxX;
 
     thinkBtn.classList.add('dodging');
     thinkBtn.style.left = randX + 'px';
