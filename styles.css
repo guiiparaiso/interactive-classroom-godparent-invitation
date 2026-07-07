@@ -112,14 +112,14 @@
 
   .envelope{
     position: relative;
-    width: 260px;
-    height: 172px;
+    width: 300px;
+    height: 198px;
     margin: 0 auto 28px;
     cursor: pointer;
     perspective: 900px;
   }
   @media (max-width: 420px){
-    .envelope{ width: 220px; height: 146px; }
+    .envelope{ width: 250px; height: 165px; }
   }
 
   .env-body{
@@ -184,6 +184,14 @@
     z-index: 2;
     transform: translateY(0%);
     transition: transform 0.7s ease 0.15s;
+  }
+
+  .envelope:not(.opened){
+    animation: envelopeFloat 3.6s ease-in-out infinite;
+  }
+  @keyframes envelopeFloat{
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
   }
 
   .envelope.opened .env-flap{
@@ -364,10 +372,27 @@
     box-shadow: 4px 4px 0 var(--line-blue);
     transform: rotate(var(--tilt, 0deg));
   }
-  .reason-list li:nth-child(1){ --tilt: -1deg; }
-  .reason-list li:nth-child(2){ --tilt: 0.8deg; }
-  .reason-list li:nth-child(3){ --tilt: -0.6deg; }
-  .reason-list li:nth-child(4){ --tilt: 1deg; }
+  .reason-list li:nth-child(1){ --tilt: -1deg; transition-delay: 0s; }
+  .reason-list li:nth-child(2){ --tilt: 0.8deg; transition-delay: 0.12s; }
+  .reason-list li:nth-child(3){ --tilt: -0.6deg; transition-delay: 0.24s; }
+  .reason-list li:nth-child(4){ --tilt: 1deg; transition-delay: 0.36s; }
+
+  /* ---- entrada suave ao rolar a página ---- */
+  .reveal-on-scroll{
+    opacity: 0;
+    transform: translateY(26px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .reveal-on-scroll.in-view{
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .reason-item.reveal-on-scroll{
+    transform: rotate(var(--tilt, 0deg)) translateY(26px);
+  }
+  .reason-item.reveal-on-scroll.in-view{
+    transform: rotate(var(--tilt, 0deg)) translateY(0);
+  }
   .reason-emoji{ font-size: 1.6rem; line-height: 1; }
   .reason-text{ font-size: 1.02rem; line-height: 1.5; }
 
@@ -416,6 +441,9 @@
   }
   .chalk-line{
     display: block;
+    width: fit-content;
+    max-width: 100%;
+    margin: 0 auto;
     clip-path: inset(0 100% 0 0);
   }
   .chalk-line.revealed{
