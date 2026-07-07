@@ -14,6 +14,23 @@
   var mainContent = document.getElementById('main-content');
   var body = document.body;
 
+  // A carta que aparece saindo do envelope usa o MESMO texto da carta
+  // principal (título + primeiro parágrafo), copiado automaticamente.
+  // Assim, quem for editar o convite só precisa mudar o texto uma vez,
+  // lá na seção principal — aqui é só um espelho.
+  (function syncLetterPreview(){
+    var previewHeading = document.getElementById('letter-preview-heading');
+    var previewText = document.getElementById('letter-preview-text');
+    var mainHeading = document.querySelector('.letter-heading');
+    var mainFirstParagraph = document.querySelector('.letter-body p');
+    if (previewHeading && mainHeading){
+      previewHeading.innerHTML = mainHeading.innerHTML;
+    }
+    if (previewText && mainFirstParagraph){
+      previewText.textContent = mainFirstParagraph.textContent;
+    }
+  })();
+
   function openEnvelope(){
     if (envelope.classList.contains('opened')) return;
     envelope.classList.add('opened');
@@ -21,7 +38,7 @@
       envelopeScreen.classList.add('hidden');
       body.classList.remove('locked');
       mainContent.classList.add('show');
-    }, 1750); // tempo aumentado para dar espaço à animação da carta desdobrando
+    }, 2300); // tempo aumentado para dar espaço à nova animação da carta desdobrando (e um tempinho pra ler)
   }
 
   envelope.addEventListener('click', openEnvelope);
