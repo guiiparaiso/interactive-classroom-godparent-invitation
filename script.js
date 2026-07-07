@@ -41,6 +41,28 @@
     }, 2300); // tempo aumentado para dar espaço à nova animação da carta desdobrando (e um tempinho pra ler)
   }
 
+  /* ---------- entrada suave dos blocos ao rolar a página ---------- */
+  (function setupScrollReveal(){
+    var revealEls = document.querySelectorAll('.reveal-on-scroll');
+    if (!revealEls.length) return;
+
+    if (!('IntersectionObserver' in window) || window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+      revealEls.forEach(function(el){ el.classList.add('in-view'); });
+      return;
+    }
+
+    var observer = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if (entry.isIntersecting){
+          entry.target.classList.add('in-view');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+
+    revealEls.forEach(function(el){ observer.observe(el); });
+  })();
+
   envelope.addEventListener('click', openEnvelope);
   envelope.addEventListener('keydown', function(e){
     if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openEnvelope(); }
