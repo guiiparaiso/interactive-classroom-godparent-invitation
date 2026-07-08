@@ -208,8 +208,8 @@
   /* ---------- carta saindo do envelope e desdobrando ---------- */
   .letter-unfold{
     position: absolute;
-    left: 2%;
-    right: 2%;
+    left: -8%;
+    right: -8%;
     bottom: 28%;
     transform-origin: bottom center;
     z-index: 5;
@@ -222,7 +222,7 @@
     border: 2px solid var(--ink);
     border-radius: 8px;
     box-shadow: 0 20px 34px var(--shadow);
-    padding: 22px 24px 26px;
+    padding: 26px 26px 30px;
     position: relative;
   }
   .letter-unfold-paper::before{ /* linha de dobra, reforça a ideia de "desdobrando" */
@@ -236,19 +236,19 @@
   .letter-unfold-heading{
     font-family: 'Caveat', cursive;
     font-weight: 700;
-    font-size: clamp(1.5rem, 6vw, 2rem);
+    font-size: clamp(1.7rem, 7vw, 2.3rem);
     color: var(--ink);
-    margin: 0 0 10px;
+    margin: 0 0 12px;
     line-height: 1.1;
   }
   .letter-unfold-text{
     font-family: 'Nunito', sans-serif;
-    font-size: clamp(0.82rem, 3vw, 0.95rem);
-    line-height: 1.5;
+    font-size: clamp(0.88rem, 3.4vw, 1.03rem);
+    line-height: 1.55;
     color: var(--ink-soft);
     margin: 0;
     display: -webkit-box;
-    -webkit-line-clamp: 3;
+    -webkit-line-clamp: 4;
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
@@ -260,9 +260,9 @@
   @keyframes letterUnfold{
     0%   { opacity: 0; transform: translateY(0) scaleY(0.06); }
     22%  { opacity: 1; }
-    50%  { transform: translateY(-50px) scaleY(0.55); }
-    78%  { transform: translateY(-108px) scaleY(0.92); }
-    100% { opacity: 1; transform: translateY(-122px) scaleY(1); }
+    50%  { transform: translateY(-56px) scaleY(0.55); }
+    78%  { transform: translateY(-122px) scaleY(0.92); }
+    100% { opacity: 1; transform: translateY(-138px) scaleY(1); }
   }
 
   /* em telas baixas, sobe bem menos pra não cortar no topo */
@@ -270,9 +270,9 @@
     @keyframes letterUnfold{
       0%   { opacity: 0; transform: translateY(0) scaleY(0.06); }
       22%  { opacity: 1; }
-      50%  { transform: translateY(-30px) scaleY(0.55); }
-      78%  { transform: translateY(-62px) scaleY(0.92); }
-      100% { opacity: 1; transform: translateY(-70px) scaleY(1); }
+      50%  { transform: translateY(-32px) scaleY(0.55); }
+      78%  { transform: translateY(-68px) scaleY(0.92); }
+      100% { opacity: 1; transform: translateY(-78px) scaleY(1); }
     }
   }
 
@@ -441,13 +441,18 @@
   }
   .chalk-line{
     display: block;
-    width: fit-content;
-    max-width: 100%;
-    margin: 0 auto;
-    clip-path: inset(0 100% 0 0);
+    width: 100%;
+    margin: 0;
   }
-  .chalk-line.revealed{
-    clip-path: inset(0 0 0 0);
+  .chalk-word{
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.28s ease, transform 0.28s ease;
+  }
+  .chalk-word.revealed{
+    opacity: 1;
+    transform: translateY(0);
   }
 
   /* canvas used to draw falling chalk-dust particles while each line "is written" */
